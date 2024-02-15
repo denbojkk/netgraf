@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pet;
+use App\Modules\PetService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class PetController extends Controller
@@ -36,9 +35,7 @@ class PetController extends Controller
             return back()->withInput()->withErrors($validator);
         }
 
-        $pet = new Pet;
-
-        $status = $pet->createPet($pet_data);
+        $status = (new PetService)->createPet($pet_data);
 
         if($status){
             return back()->with("success", "Udało się dodać nowego zwierzaka. ID utworzonego wpisu: ".$status.".");
@@ -67,9 +64,7 @@ class PetController extends Controller
             return back()->withInput()->withErrors($validator);
         }
 
-        $pet = new Pet;
-
-        $status = $pet->findPet($pet_data["form_find_pet_id"]);
+        $status = (new PetService)->findPet($pet_data["form_find_pet_id"]);
 
         if($status->ok()){
             return back()->with("success", "Udało się odnaleźć szukanego zwierzaka. Nazwa: ".$status->json()['name'].".");
@@ -105,9 +100,7 @@ class PetController extends Controller
             return back()->withInput()->withErrors($validator);
         }
 
-        $pet = new Pet;
-
-        $status = $pet->editPet($pet_data["form_edit_pet_pet_id"], $pet_data["form_edit_pet_pet_name"]);
+        $status = (new PetService)->editPet($pet_data["form_edit_pet_pet_id"], $pet_data["form_edit_pet_pet_name"]);
 
         if($status->ok()){
             return back()->with("success", "Udało się edytować wybranego zwierzaka.");
@@ -140,9 +133,7 @@ class PetController extends Controller
             return back()->withInput()->withErrors($validator);
         }
 
-        $pet = new Pet;
-
-        $status = $pet->deletePet($pet_data["form_delete_pet_pet_id"]);
+        $status = (new PetService)->deletePet($pet_data["form_delete_pet_pet_id"]);
 
         if($status->ok()){
             return back()->with("success", "Pomyślnie usunięto wybranego zwierzaka.");
